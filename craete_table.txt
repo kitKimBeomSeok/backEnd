@@ -1,0 +1,114 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema music
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema music
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `music` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `music` ;
+
+-- -----------------------------------------------------
+-- Table `music`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `music`.`user` (
+  `id` VARCHAR(255) NOT NULL,
+  `username` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `music`.`music`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `music`.`music` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `music_name` VARCHAR(255) NULL DEFAULT NULL,
+  `music_link` VARCHAR(255) NULL DEFAULT NULL,
+  `audio` LONGBLOB NULL DEFAULT NULL,
+  `midi` LONGBLOB NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `user_id` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `user_id` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `music_ibfk_1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `music`.`user` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `music`.`playlist`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `music`.`playlist` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NULL DEFAULT NULL,
+  `body` TEXT NULL DEFAULT NULL COMMENT 'Content of the post',
+  `user_id` VARCHAR(255) NULL DEFAULT NULL,
+  `status` VARCHAR(255) NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `user_id` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `playlist_ibfk_1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `music`.`user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `music`.`music_playlist`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `music`.`music_playlist` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `playlist_id` INT NULL DEFAULT NULL,
+  `music_id` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `playlist_id` (`playlist_id` ASC) VISIBLE,
+  INDEX `music_id` (`music_id` ASC) VISIBLE,
+  CONSTRAINT `music_playlist_ibfk_1`
+    FOREIGN KEY (`playlist_id`)
+    REFERENCES `music`.`playlist` (`id`),
+  CONSTRAINT `music_playlist_ibfk_2`
+    FOREIGN KEY (`music_id`)
+    REFERENCES `music`.`music` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `music`.`sheets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `music`.`sheets` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `music_id` INT NOT NULL,
+  `sheet_img` LONGBLOB NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_sheets_music1_idx` (`music_id` ASC) VISIBLE,
+  CONSTRAINT `fk_sheets_music1`
+    FOREIGN KEY (`music_id`)
+    REFERENCES `music`.`music` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

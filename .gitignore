@@ -1,0 +1,6 @@
+Lib/
+venv
+venv/Lib/
+/venv/
+venv/
+_pycache_
