@@ -7,7 +7,7 @@ from servcie import music_service,musicPlaylist_service,user_service,sheets_serv
 from sqlalchemy import create_engine
 from sqlite3 import IntegrityError
 import orm_models.table
-from orm_models.table import Music, User, Playlist, MusicPlaylist
+from orm_models.table import Music, User, Playlist, MusicPlaylist,Sheet
 from sqlalchemy.orm import sessionmaker
 
 # 데이터베이스 연결 엔진 생성
@@ -30,7 +30,7 @@ client_secret = "h1trrHlAnzG6IKCGFs5PcoSIOelrmWDq"
 
 @app.route("/")
 def home():
-    return render_template('demo.html')
+    return render_template('ATM_Build/index.html')
 
 
 @app.route("/authorize")

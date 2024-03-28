@@ -55,7 +55,9 @@ class Music(Base):
     midi = Column(String)  # Blob 대신 String 형식으로 변경
     created_at = Column(TIMESTAMP, default=datetime.now())  # 현재 시각을 기본값으로 설정
     user_id = Column(String(255), ForeignKey('user.id', ondelete='CASCADE'))
+
     user = relationship("User", back_populates="musics")
+    sheets = relationship("Sheet", back_populates="music")
 
 
     @classmethod
@@ -100,7 +102,6 @@ class Sheet(Base):
 
     # music 테이블과의 관계 설정
     music = relationship('Music', back_populates='sheets')
-
 # Playlist 모델 정의
 class Playlist(Base):
     __tablename__ = 'playlist'
