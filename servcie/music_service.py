@@ -5,11 +5,21 @@ from MIDI import MIDIFile
 from audiosegment import AudioSegment
 
 from orm_models.music import Music
+from orm_models.sheet import Sheet
 
 #TODO  수정해야함 추후 모델 개발후 변경
 def insert_music(session, music_name, music_link, wav_file_path, midi_file_path,user_id):
     Music.create_music(session,"utttane","asd","audio/y2mate.com - Leinaうたたね  utataneMV.mp3","audio/y2mate.com - Leinaうたたね  utataneMV.midi","1")
+#해당 음악의 악보정보 가져오기
+def load_sheet(session, music_id):
+    """선택한 음원의 악보정보를 가져온다."""
+    try:
+        sheet_list = session.query(Sheet).filter(Sheet.music_id == music_id).all()
+        return sheet_list
 
+    except Exception as e:
+        print("Error occurred:", e)
+        return None
 def mp3_to_wav(mp3_data, output_file):
     # MP3 데이터를 BytesIO 객체로 읽어옴
     mp3_stream = io.BytesIO(mp3_data)
