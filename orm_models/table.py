@@ -101,18 +101,18 @@ class Sheet(Base):
     __tablename__ = 'sheets'
     id = Column(Integer, primary_key=True, autoincrement=True)
     music_id = Column(Integer, ForeignKey('music.id', ondelete='CASCADE'))
+    sheet_name = Column(String(255))
     sheet_img = Column(String)
 
     # music 테이블과의 관계 설정
     music = relationship('Music', back_populates='sheets')
 
     @classmethod
-    def create_sheet(cls, session,music_id, sheet_path):
+    def create_sheet(cls, session,music_id,sheet_name,sheet_path):
         sheet_img = read_file_as_string(sheet_path)
-        new_sheet = cls(music_id = music_id ,sheet_img = sheet_img)
+        new_sheet = cls(music_id = music_id ,sheet_name= sheet_name, sheet_img = sheet_img)
         session.add(new_sheet)
         session.commit()
-
 
 # Playlist 모델 정의
 class Playlist(Base):
@@ -120,7 +120,6 @@ class Playlist(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(255))
-    body = Column(Text)
     user_id = Column(String(255), ForeignKey('user.id', ondelete='CASCADE'))
     status = Column(String(255))
     created_at = Column(TIMESTAMP)
@@ -129,8 +128,12 @@ class Playlist(Base):
     musics = relationship("Music", secondary="music_playlist")
 
     @classmethod
-    def create_playlist(cls, session, title, body, user_id):
-        new_playlist = cls(title=title, body=body, user_id=user_id)
+    def create_playlist(cls, session, title, user_id, music_list):
+        new_playlist = cls(title=title, user_id=user_id)
+
+        for music in music_list:
+            new_playlist.musics.append(music)
+
         session.add(new_playlist)
         session.commit()
 
@@ -152,7 +155,6 @@ class Playlist(Base):
         if playlist:
             session.delete(playlist)
             session.commit()
-
 
 # MusicPlaylist 연결 테이블 모델 정의
 class MusicPlaylist(Base):

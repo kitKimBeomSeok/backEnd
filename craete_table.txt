@@ -98,6 +98,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `music`.`sheets` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `music_id` INT NOT NULL,
+  `sheet_name` VARCHAR(255) NULL DEFAULT NULL,
   `sheet_img` LONGBLOB NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_sheets_music1_idx` (`music_id` ASC) VISIBLE,

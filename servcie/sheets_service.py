@@ -19,7 +19,7 @@ def create_sheet(session, music_id):
     try:
         for sheet in sheet_list:
             print(f"{sheet_folder}{sheet}")
-            Sheet.create_sheet(session, music_id,f"{sheet_folder}{sheet}")
+            Sheet.create_sheet(session, music_id,sheet,f"{sheet_folder}{sheet}")
     except Exception as e:
         # IntegrityError가 발생하면 이미 존재하는 사용자이므로 롤백
         session.rollback()
