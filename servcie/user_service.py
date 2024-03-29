@@ -1,5 +1,5 @@
 from sqlite3 import IntegrityError
-from orm_models.table import User
+from orm_models.user import User
 
 def create_user(session,user_id, user_name):
     # 새로운 사용자 추가

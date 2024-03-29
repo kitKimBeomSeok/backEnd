@@ -1,4 +1,6 @@
-from orm_models.table import Music,Sheet
+from orm_models.music import Music
+from orm_models.sheet import Sheet
+
 import os.path
 import subprocess
 import logging
@@ -32,8 +34,9 @@ def create_sheet(session, music_id):
     for file in sheet_list:
         os.remove(f"{sheet_folder}{file}")
 
-"""선택한 음원 악보 조회 list 형태로 반환"""
+""" 선택한 음원 악보 조회 list 형태로 반환 """
 def select_sheet(music_id):
+
     print()
 
 """악보 삭제 : 악보 이미지 리스트 삭제"""

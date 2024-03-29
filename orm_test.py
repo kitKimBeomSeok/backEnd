@@ -13,5 +13,5 @@ engine = create_engine('mysql+pymysql://root:102302@127.0.0.1/music', echo=True)
 Session = sessionmaker(bind=engine)
 # Session 인스턴스 생성
 DB_session = Session()
-
-sheets_service.create_sheet(DB_session,8)
+music_list = [4,5,6,7]
+playplist_service.create_playlist(DB_session,"test","3373469963",music_list)

@@ -1,23 +1,12 @@
 import os
 
-
 import requests
 from flask import Flask, render_template, redirect, request, session, url_for
 from servcie import music_service,musicPlaylist_service,user_service,sheets_service,playplist_service
 from sqlalchemy import create_engine
-from sqlite3 import IntegrityError
-import orm_models.table
-from orm_models.table import Music, User, Playlist, MusicPlaylist,Sheet
+from orm_models.base import Base
+
 from sqlalchemy.orm import sessionmaker
-
-# 데이터베이스 연결 엔진 생성
-engine = create_engine('mysql+pymysql://root:102302@127.0.0.1/music', echo=True)
-# Session 클래스 생성
-Session = sessionmaker(bind=engine)
-# Session 인스턴스 생성
-DB_session = Session()
-
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 user_id = ""
@@ -141,4 +130,15 @@ def leave():
     return resp.text
 
 if __name__ == "__main__":
+    # 데이터베이스 연결 엔진 생성
+    engine = create_engine('mysql+pymysql://root:102302@127.0.0.1/music', echo=True)
+
+    # 테이블 생성
+    Base.metadata.create_all(engine)
+
+    # Session 클래스 생성
+    Session = sessionmaker(bind=engine)
+
+    # Session 인스턴스 생성
+    DB_session = Session()
     app.run(host='0.0.0.0', debug=True, port=80)

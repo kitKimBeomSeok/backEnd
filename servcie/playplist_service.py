@@ -1,4 +1,5 @@
-from orm_models.table import Playlist,Music
+from orm_models.playlist import Playlist
+from orm_models.music import Music
 
 #플레이리스트 생성
 """
@@ -6,13 +7,21 @@ from orm_models.table import Playlist,Music
 """
 def create_playlist(session,title,user_id,selected_musics):
     # selected_musics에서 음악의 ID를 사용하여 해당 음악을 가져옴
+    print(selected_musics)
     try :
-        music_list = session.query(Music).filter(Music.id in(selected_musics)).all()
+        music_list = session.query(Music).filter(Music.id.in_(selected_musics)).all()
+        print(music_list)
         Playlist.create_playlist(session,title,user_id,music_list)
     except Exception as e :
         print("오류 발생" ,e)
     finally:
         session.close()
+
+#플레이리스트 조회 - 플레이리스트
+"""자신이 생성한 플레이리스트를 조회한다."""
+
+#플레이리스트 조회 - 음원
+"""선택한 플레이리스트의 음원 정보를 가져온다."""
 
 #플레이리스트 삭제
 """

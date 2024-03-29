@@ -4,7 +4,7 @@ import io
 from MIDI import MIDIFile
 from audiosegment import AudioSegment
 
-from orm_models.table import Music
+from orm_models.music import Music
 
 #TODO  수정해야함
 def insert_music(session, music_name, music_link, wav_file_path, midi_file_path,user_id):
