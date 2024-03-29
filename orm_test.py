@@ -1,9 +1,6 @@
 from sqlalchemy import create_engine
 from sqlite3 import IntegrityError
 
-import orm_models.table
-from orm_models import table
-from orm_models.table import Music, User, Playlist, MusicPlaylist
 from servcie import music_service,sheets_service,playplist_service,musicPlaylist_service,user_service
 from sqlalchemy.orm import sessionmaker
 
@@ -14,4 +11,4 @@ Session = sessionmaker(bind=engine)
 # Session 인스턴스 생성
 DB_session = Session()
 music_list = [4,5,6,7]
-playplist_service.create_playlist(DB_session,"test","3373469963",music_list)
+playplist_service.load_playlist(DB_session,4)

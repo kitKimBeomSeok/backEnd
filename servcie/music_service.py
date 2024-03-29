@@ -6,7 +6,7 @@ from audiosegment import AudioSegment
 
 from orm_models.music import Music
 
-#TODO  수정해야함
+#TODO  수정해야함 추후 모델 개발후 변경
 def insert_music(session, music_name, music_link, wav_file_path, midi_file_path,user_id):
     Music.create_music(session,"utttane","asd","audio/y2mate.com - Leinaうたたね  utataneMV.mp3","audio/y2mate.com - Leinaうたたね  utataneMV.midi","1")
 
