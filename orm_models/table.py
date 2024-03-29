@@ -5,10 +5,16 @@ from sqlite3 import IntegrityError
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Text, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-
+import os
 # 데이터베이스 연결 설정
 engine = create_engine('mysql+pymysql://root:102302@127.0.0.1/music', echo=True)  # 데이터베이스 파일명은 'music.db'입니다.
 Base = declarative_base()
+
+#blob 데이터를 문자열로 변환한다.
+def read_file_as_string(file_path):
+    with open(file_path, 'rb') as file:
+        file_content = file.read()
+        return file_content
 
 # User 모델 정의
 class User(Base):
@@ -48,7 +54,7 @@ class User(Base):
 class Music(Base):
     __tablename__ = 'music'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     music_name = Column(String(255))
     music_link = Column(String(255))
     audio = Column(String)  # Blob 대신 String 형식으로 변경
@@ -62,10 +68,7 @@ class Music(Base):
 
     @classmethod
     def create_music(cls, session, music_name, music_link, wav_file_path, midi_file_path, user_id):
-        def read_file_as_string(cls, file_path):
-            with open(file_path, 'rb') as file:
-                file_content = file.read()
-                return file_content
+
 
         audio_content = read_file_as_string(wav_file_path)
         midi_content = read_file_as_string(midi_file_path)
@@ -102,11 +105,20 @@ class Sheet(Base):
 
     # music 테이블과의 관계 설정
     music = relationship('Music', back_populates='sheets')
+
+    @classmethod
+    def create_sheet(cls, session,music_id, sheet_path):
+        sheet_img = read_file_as_string(sheet_path)
+        new_sheet = cls(music_id = music_id ,sheet_img = sheet_img)
+        session.add(new_sheet)
+        session.commit()
+
+
 # Playlist 모델 정의
 class Playlist(Base):
     __tablename__ = 'playlist'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(255))
     body = Column(Text)
     user_id = Column(String(255), ForeignKey('user.id', ondelete='CASCADE'))
@@ -146,7 +158,7 @@ class Playlist(Base):
 class MusicPlaylist(Base):
     __tablename__ = 'music_playlist'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     playlist_id = Column(Integer, ForeignKey('playlist.id', ondelete='CASCADE'))
     music_id = Column(Integer, ForeignKey('music.id', ondelete='CASCADE'))
 

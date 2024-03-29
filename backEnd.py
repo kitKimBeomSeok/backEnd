@@ -130,7 +130,7 @@ def leave():
         DB_session = Session()
         user_id = session['user_id']
         user_name = session['user_name']
-        user_service.delete_user(DB_session, user_id, user_name)
+        user_service.delete_user(DB_session, user_id)
     finally:
         # Session 종료
         DB_session.close()

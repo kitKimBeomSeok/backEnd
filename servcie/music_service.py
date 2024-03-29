@@ -6,10 +6,9 @@ from audiosegment import AudioSegment
 
 from orm_models.table import Music
 
-
+#TODO  수정해야함
 def insert_music(session, music_name, music_link, wav_file_path, midi_file_path,user_id):
-    music = Music
-    music.create_music(session,"utttane","asd","audio/y2mate.com - Leinaうたたね  utataneMV.mp3","audio/y2mate.com - Leinaうたたね  utataneMV.midi","1")
+    Music.create_music(session,"utttane","asd","audio/y2mate.com - Leinaうたたね  utataneMV.mp3","audio/y2mate.com - Leinaうたたね  utataneMV.midi","1")
 
 def mp3_to_wav(mp3_data, output_file):
     # MP3 데이터를 BytesIO 객체로 읽어옴
