@@ -15,11 +15,15 @@ def load_sheet(session, music_id):
     """선택한 음원의 악보정보를 가져온다."""
     try:
         sheet_list = session.query(Sheet).filter(Sheet.music_id == music_id).all()
+        for sheet in sheet_list:
+            print(sheet.id)
         return sheet_list
-
     except Exception as e:
         print("Error occurred:", e)
         return None
+
+
+
 def mp3_to_wav(mp3_data, output_file):
     # MP3 데이터를 BytesIO 객체로 읽어옴
     mp3_stream = io.BytesIO(mp3_data)

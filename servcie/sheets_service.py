@@ -1,11 +1,14 @@
+import io
+
 from orm_models.music import Music
 from orm_models.sheet import Sheet
-
+from PIL import Image
 import os.path
 import subprocess
 import logging
-"""악보 생성"""
+#악보 생성
 def create_sheet(session, music_id):
+    """악보 생성"""
     midi_folder = "./midi/"
     sheet_folder = "./sheets/"
     MuseScore4_exe_path = "C:/Program Files/MuseScore 4/bin/MuseScore4.exe"
@@ -33,17 +36,6 @@ def create_sheet(session, music_id):
     #변환한 이미지를 삭제합니다.
     for file in sheet_list:
         os.remove(f"{sheet_folder}{file}")
-
-""" 선택한 음원 악보 조회 list 형태로 반환 """
-def select_sheet(music_id):
-
-    print()
-
-"""악보 삭제 : 악보 이미지 리스트 삭제"""
-def delete_sheet(sheets):
-    print()
-
-
 
 logging.basicConfig(filename='midi_to_sheet.log',
                     level=logging.INFO,
@@ -93,6 +85,32 @@ def midi_to_sheet(midi_path, output_path,
 
     print("악보 생성 완료")
 
+#TODO 해야함
+#blob to png
+def blob_to_png(sheet_list):
+    """db에서 음원의 악보 리스트를 받아 blob 형태의 데이터를 png로 바꾼다"""
+    for sheet in sheet_list:
+        print(sheet.sheet_img)
+    png_images = []
 
+    for sheet in sheet_list:
+        # Blob 데이터를 BytesIO 객체로 읽어옴
+        blob_stream = io.BytesIO(sheet.sheet_img)
+
+        # BytesIO 객체를 이미지로 열기
+        img = Image.open(blob_stream)
+
+        # 파일 이름에 있는 공백이나 특수 문자를 처리하여 유효한 파일 이름 생성
+        cleaned_sheet_name = clean_filename(sheet.sheet_name)
+
+        # 저장할 파일의 경로 및 이름 설정
+        output_file = os.path.join("../sheets", f"{cleaned_sheet_name}")
+
+        # PNG 이미지로 변환하여 파일로 저장
+        img.save(f"{output_file}.png")
+
+        png_images.append(f"{output_file}.png")
+
+    return png_images
 
 
